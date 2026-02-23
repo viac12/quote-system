@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/main-interface.css">
+    <link rel="stylesheet" href="../styles/table.css">
+    <link rel="stylesheet" href="../styles/quote.css">
+</head>
+<body>
+    <!--TOP BAR-->
+    <div class="top-bar">
+        <h1>Quote System</h1>
+    </div>
+
+    <!--MAIN SECTION-->
+    <div class="main-section">
+
+        <!--QUOTE LIST-->
+        <div class="quote-list">
+            <button id="createQuote" type="button"> Create Quote </button>
+            <br>
+            <input type="text" id="search" name="search" placeholder="Search Quotes">
+            <button id="searchQuotes" type="button"> Search </button>
+
+            <table>
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                </colgroup>
+
+                <thead>
+                    <tr>
+                        <th>Quote Id</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Associate</th>
+                        <th>Status</th>
+                        <th>View</th>
+                    </tr>
+
+                    <tr>
+                        <td>0</td>
+                        <td>Heater Tuneup</td>
+                        <td>$240</td>
+                        <td>James Smith</td>
+                        <td>Open</td>
+                        <td>View</td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <!--DIVIDER-->
+        <div class="vl"></div>
+
+        <!--QUOTE VIEW-->
+        <div class="quote-view">                
+            <div class="quote-id"></div>
+            <div class="quote-details">
+                <div class="customer-details"></div>
+                <div class="line-items"></div>
+                <div class="notes"></div>
+                <div class="price">
+                    <div id="price"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

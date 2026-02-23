@@ -1,0 +1,15 @@
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+tr:first-child {
+  background-color: #d6d6d6; /* header color */
+}
+
+.quote-list table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+

@@ -1,0 +1,26 @@
+.top-bar {
+    height: 75px;
+    display: flex;
+    align-items: center;
+    background-color: rgb(214, 214, 214);
+}
+
+#createQuote {
+    margin-bottom: 25px;
+}
+
+.main-section {
+    display: flex;
+
+}
+.quote-list {
+    width: 50%;
+}
+
+.quote-list table {
+    width: 100%;
+}
+
+.vl {
+    border-right:2px solid black;
+}
