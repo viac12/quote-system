@@ -3,7 +3,7 @@ th, td {
   padding: 8px;
 }
 
-tr:first-child {
+.quote-list tr:first-child {
   background-color: #d6d6d6; /* header color */
 }
 

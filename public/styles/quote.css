@@ -1,7 +1,7 @@
 .quote-view {
     display: flex;
     flex-direction: column;
-    background-color: gray;
+
     width: 50%;
  
 }
@@ -27,7 +27,6 @@
 .line-items {
     margin-top: 25px;
     width: 90%;
-    height: 500px;
     background-color: white;
 }
 
@@ -39,6 +38,18 @@
     background-color: white;
     border: 1px solid black;
 
+}
+
+#notes {
+    background-color: #d6d6d6;
+    height: 30px;
+    margin-top: none;
+    display:flex;
+    align-items: center;
+}
+
+#notes h2 {
+    margin: 0 0 0 0;
 }
 
 .price {
@@ -56,3 +67,9 @@
     background-color: white;
     margin-right: 25px;
 }
+
+.line-items table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
