@@ -38,4 +38,20 @@ router.get("/quotes", async (req, res, next) => {
   });
 });
 
+router.post("/quotes/:id/finalize", async (req, res, next) => {
+  const quoteRepo = dataSource.getRepository(Quote);
+  const quoteID = Number(req.params.id);
+  const updateResult = await quoteRepo.update(quoteID, {
+    is_finalized: () => "NOT is_finalized",
+  });
+
+  if (updateResult.affected == 0) {
+    res.sendStatus(404);
+  }
+
+  const url = new URL("http://localhost:3000/quotes");
+  url.searchParams.set("id", quoteID);
+  res.redirect(url);
+});
+
 module.exports = router;

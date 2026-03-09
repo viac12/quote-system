@@ -15,6 +15,7 @@ module.exports = new EntitySchema({
     },
     is_finalized: {
       type: Boolean,
+      default: false,
     },
     discount_type: {
       type: String,
@@ -24,6 +25,7 @@ module.exports = new EntitySchema({
     },
     is_sanctioned: {
       type: Boolean,
+      default: false,
     },
   },
   relations: {
@@ -38,6 +40,11 @@ module.exports = new EntitySchema({
     },
     lineitems: {
       target: "LineItem",
+      type: "one-to-many",
+      inverseSide: "quote",
+    },
+    notes: {
+      target: "Note",
       type: "one-to-many",
       inverseSide: "quote",
     },
