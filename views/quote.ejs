@@ -20,14 +20,16 @@
       <div class="quote-list">
         <button id="createQuote" type="button">Create Quote</button>
         <br />
-        <input
-          type="text"
-          id="search"
-          name="search"
-          placeholder="Search Quotes"
-        />
-        <button id="searchQuotes" type="button">Search</button>
+        <form action="/quotes" method="GET">
+          <input
+            type="text"
+            id="search"
+            name="search"
+            placeholder="Search Quotes"
+          />
 
+          <button id="searchQuotes" type="submit">Search</button>
+        </form>
         <table>
           <colgroup>
             <col style="width: 10%" />
@@ -58,11 +60,21 @@
               <!-- <td><%= quote.associate %></td> -->
               <td><%= quote.status %></td>
               <td>
-                <a href="?id=<%= quote.id %>"
+                <a
+                    href="<%= (() => {
+                      const params = new URLSearchParams();
+                      for (const [name, value] of Object.entries(req.query)) {
+                        params.set(name, value);
+                      }
+                      params.set("id", quote.id);
+                      return "?" + params.toString();
+                    })() %>"
                     <% if (selectedQuote) { %>
                     onclick="
                       event.preventDefault();
-                      window.location.replace('?id=<%= quote.id %>');
+                      const params = new URLSearchParams(window.location.search);
+                      params.set('id', '<%= quote.id %>')
+                      window.location.replace('?' + params.toString());
                     "
                     <% } %>
                   >View</a>

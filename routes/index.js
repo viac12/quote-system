@@ -17,11 +17,20 @@ router.get("/users", (req, res, next) => {
 router.get("/quotes", async (req, res, next) => {
   const quoteRepo = dataSource.getRepository(Quote);
   const quoteID = req.query.id;
+  const searchTerm = req.query.search;
+
+  const whereParams = {};
+
+  if (searchTerm) {
+    whereParams["id"] = searchTerm;
+  }
+
   const quotes = await quoteRepo.find({
     relations: {
       customer: true,
       lineitems: true,
     },
+    where: whereParams,
   });
 
   let selectedQuote;
@@ -35,6 +44,7 @@ router.get("/quotes", async (req, res, next) => {
   res.render("quote", {
     quotes,
     selectedQuote,
+    req,
   });
 });
 
