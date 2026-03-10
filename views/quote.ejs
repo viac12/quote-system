@@ -21,7 +21,27 @@
     <div class="main-section">
       <!--QUOTE LIST-->
       <div class="quote-list p-4">
-        <button id="createQuote" type="button" class="btn">Create Quote</button>
+        <button command="show-modal" commandfor="create-quote" class="btn mb-4">Create Quote</button>
+        <dialog id="create-quote" class="inset-0 m-auto p-6 rounded-md min-w-md">
+          <h2 class="mb-4 font-bold text-lg">Create Quote</h2>
+          <form action="/quotes" method="POST">
+            <div class="flex flex-col gap-4">
+            <input
+              type="text"
+              id="description"
+              name="description"
+              class="input"
+              />
+            <select name="customer" id="customer-select" class="select">
+              <option value="1">Nick Iacullo</option>
+            </select>
+            </div>
+            <button commandfor="create-quote" command="close" type="button" class="btn">Close</button>
+            <button id="submitQuote" type="submit" class="btn btn-primary">Submit</button>  
+          </form>
+
+        </dialog>
+        
         <br />
         <form action="/quotes" method="GET" class="mb-2">
           <input
