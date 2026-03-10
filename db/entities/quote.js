@@ -27,6 +27,9 @@ module.exports = new EntitySchema({
       type: Boolean,
       default: false,
     },
+    description: {
+      type: String,
+    },
   },
   relations: {
     customer: {
