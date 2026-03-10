@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const Quote = require("../db/entities/quote");
 const LineItem = require("../db/entities/line_item");
+const Note = require("../db/entities/note");
 const dataSource = require("../db");
 
 /* GET home page. */
@@ -29,6 +30,7 @@ router.get("/quotes", async (req, res, next) => {
     relations: {
       customer: true,
       lineitems: true,
+      notes: true,
     },
     where: whereParams,
   });

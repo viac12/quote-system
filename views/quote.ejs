@@ -4,31 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="/styles/main-interface.css" />
     <link rel="stylesheet" href="/styles/table.css" />
     <link rel="stylesheet" href="/styles/quote.css" />
   </head>
   <body>
     <!--TOP BAR-->
-    <div class="top-bar">
-      <h1>Quote System</h1>
+    <div class="top-bar p-4">
+      <h1 class="font-bold">Quote System</h1>
     </div>
 
     <!--MAIN SECTION-->
     <div class="main-section">
       <!--QUOTE LIST-->
-      <div class="quote-list">
-        <button id="createQuote" type="button">Create Quote</button>
+      <div class="quote-list p-4">
+        <button id="createQuote" type="button" class="btn">Create Quote</button>
         <br />
-        <form action="/quotes" method="GET">
+        <form action="/quotes" method="GET" class="mb-2">
           <input
             type="text"
             id="search"
             name="search"
             placeholder="Search Quotes"
+            class="input"
           />
 
-          <button id="searchQuotes" type="submit">Search</button>
+          <button id="searchQuotes" type="submit" class="btn">Search</button>
         </form>
         <table>
           <colgroup>
@@ -138,6 +142,11 @@
             <div id="notes">
               <h2>Notes</h2>
             </div>
+              <ul>
+                <% for (const note of selectedQuote.notes) { %>
+                  <li><%= note.description %></li>
+                <% } %>
+              </ul>
           </div>
 
           <div class="finalize">
