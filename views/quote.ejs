@@ -8,42 +8,49 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="/styles/main-interface.css" />
-    <link rel="stylesheet" href="/styles/table.css" />
-    <link rel="stylesheet" href="/styles/quote.css" />
   </head>
   <body>
     <!--TOP BAR-->
-    <div class="top-bar p-4 flex flex-row gap-5">
+    <div class="top-bar px-8 py-4 flex flex-row gap-5">
       <h1 class="font-bold">Quote System</h1>
     </div>
 
     <!--MAIN SECTION-->
-    <div class="main-section">
+    <div class="flex">
       <!--QUOTE LIST-->
-      <div class="quote-list p-4">
-        <button command="show-modal" commandfor="create-quote" class="btn mb-4">Create Quote</button>
+      <div class="quote-list p-8 flex-grow">
+
         <dialog id="create-quote" class="inset-0 m-auto p-6 rounded-md min-w-md">
           <h2 class="mb-4 font-bold text-lg">Create Quote</h2>
           <form action="/quotes" method="POST">
-            <div class="flex flex-col gap-4">
-            <input
-              type="text"
-              id="description"
-              name="description"
-              class="input"
-              />
-            <select name="customer" id="customer-select" class="select">
-              <option value="1">Nick Iacullo</option>
-            </select>
+            <div class="flex flex-col gap-2 mb-6">
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Description</legend>
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  class="input w-full"
+                  />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Customer</legend>
+                <select name="customer" id="customer-select" class="select w-full">
+                  <option value="1">Nick Iacullo</option>
+                </select>
+              </fieldset>
             </div>
-            <button commandfor="create-quote" command="close" type="button" class="btn">Close</button>
-            <button id="submitQuote" type="submit" class="btn btn-primary">Submit</button>  
+            <div class="flex gap-2 justify-end">
+              <button commandfor="create-quote" command="close" type="button" class="btn">Cancel</button>
+              <button id="submitQuote" type="submit" class="btn btn-primary">Submit</button> 
+            </div> 
           </form>
 
         </dialog>
         
-        <br />
-        <form action="/quotes" method="GET" class="mb-2">
+        <div class="flex justify-between">
+        <form action="/quotes" method="GET" class="flex gap-2 mb-2">
           <input
             type="text"
             id="search"
@@ -54,77 +61,82 @@
 
           <button id="searchQuotes" type="submit" class="btn">Search</button>
         </form>
-        <table>
-          <colgroup>
-            <col style="width: 10%" />
-            <col style="width: 40%" />
-            <col style="width: 10%" />
-            <col style="width: 10%" />
-            <col style="width: 10%" />
-            <col style="width: 10%" />
-          </colgroup>
+        <button command="show-modal" commandfor="create-quote" class="btn btn-soft btn-primary mb-4">Create Quote</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table">
+            <colgroup>
+              <col style="width: 0" />
+              <col />
+              <col />
+              <col />
+              <col style="width: 0" />
+            </colgroup>
 
-          <thead>
-            <tr>
-              <th>Quote Id</th>
-              <th>Description</th>
-              <th>Customer</th>
-              <!-- <th>Price</th> -->
-              <!-- <th>Associate</th> -->
-              <th>Status</th>
-              <th>View</th>
-            </tr>
+            <thead>
+              <tr class="rounded-box">
+                <th>Quote Id</th>
+                <th>Description</th>
+                <th>Customer</th>
+                <!-- <th>Price</th> -->
+                <!-- <th>Associate</th> -->
+                <th>Status</th>
+                <th>View</th>
+              </tr>
 
-            <% quotes.forEach(function(quote){ %>
-            <tr>
-              <td><%= quote.id %></td>
-              <td><%= quote.description %></td>
-              <td><%= quote.customer.name %></td>
-              <!-- <td>$<%= quote.price %></td> -->
-              <!-- <td><%= quote.associate %></td> -->
-              <td><%= quote.status %></td>
-              <td>
-                <a
-                    href="<%= (() => {
-                      const params = new URLSearchParams();
-                      for (const [name, value] of Object.entries(req.query)) {
-                        params.set(name, value);
-                      }
-                      params.set("id", quote.id);
-                      return "?" + params.toString();
-                    })() %>"
-                    <% if (selectedQuote) { %>
-                    onclick="
-                      event.preventDefault();
-                      const params = new URLSearchParams(window.location.search);
-                      params.set('id', '<%= quote.id %>')
-                      window.location.replace('?' + params.toString());
-                    "
-                    <% } %>
-                  >View</a>
-              </td>
-            </tr>
-            <% }); %>
-          </thead>
-        </table>
+              <% quotes.forEach(function(quote){ %>
+              <tr class="<%= quote == selectedQuote ? "bg-base-200" : "" %>">
+                <td><%= quote.id %></td>
+                <td><%= quote.description %></td>
+                <td><%= quote.customer.name %></td>
+                <!-- <td>$<%= quote.price %></td> -->
+                <!-- <td><%= quote.associate %></td> -->
+                <td><%= quote.status %></td>
+                <td class="text-center">
+                  <a
+                      class="btn btn-sm"
+                      href="<%= (() => {
+                        const params = new URLSearchParams();
+                        for (const [name, value] of Object.entries(req.query)) {
+                          params.set(name, value);
+                        }
+                        params.set("id", quote.id);
+                        return "?" + params.toString();
+                      })() %>"
+                      <% if (selectedQuote) { %>
+                      onclick="
+                        event.preventDefault();
+                        const params = new URLSearchParams(window.location.search);
+                        params.set('id', '<%= quote.id %>')
+                        window.location.replace('?' + params.toString());
+                      "
+                      <% } %>
+                    >View</a>
+                </td>
+              </tr>
+              <% }); %>
+            </thead>
+          </table>
+        </div>
       </div>
 
+
+      <% if (selectedQuote) { %>
       <!--DIVIDER-->
       <div class="vl"></div>
-
+      
       <!--QUOTE VIEW-->
-      <% if (selectedQuote) { %>
-      <div class="quote-view">
-        <div class="quote-id">
-          <h2>
+      <div class="p-8 flex flex-col flex-grow">
+        <div class="mb-4">
+          <h2 class="font-bold text-lg">
             Quote #
             <%= selectedQuote.id %>
           </h2>
+          <div class="divider"></div>
         </div>
 
-        <div class="quote-details">
+        <div class="quote-details mb-20">
           <div class="customer-details">
-            <hr />
             <ul>
               <li><%= selectedQuote.customer.name %></li>
               <li>Customer Phone #</li>
@@ -133,7 +145,7 @@
             </ul>
           </div>
 
-          <div class="line-items">
+          <div class="line-items mb-4">
             <table>
               <colgroup>
                 <col style="width: 10%" />
@@ -166,57 +178,70 @@
           </div>
 
           <button command="show-modal" commandfor="add-lineitem" class="btn mb-4">Add Line Item</button>
-            <dialog id="add-lineitem" class="inset-0 m-auto p-6 rounded-md min-w-md">
-              <h2 class="mb-4 font-bold text-lg">Add Line Item</h2>
-              <form action="/quotes/<%= selectedQuote.id %>/add-lineitem" method="POST">
-                <div class="flex flex-col gap-4">
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  class="input"
-                  />
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  class="input"
-                  />
-                </div>
-                <button commandfor="add-lineitem" command="close" type="button" class="btn">Close</button>
-                <button id="submitLineItem" type="submit" class="btn btn-primary">Submit</button>  
-              </form>
 
-            </dialog>
+          <dialog id="add-lineitem" class="inset-0 m-auto p-6 rounded-md min-w-md">
+            <h2 class="mb-4 font-bold text-lg">Add Line Item</h2>
+            <form action="/quotes/<%= selectedQuote.id %>/add-lineitem" method="POST">
+              <div class="flex flex-col gap-2 mb-6">
+                <fieldset class="fieldset">
+                  <legend class="fieldset-legend">Description</legend>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    class="input w-full"
+                    required
+                    />
+                 </fieldset>
+
+                <fieldset class="fieldset">
+                  <legend class="fieldset-legend">Price</legend>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    class="input validator w-full"
+                    required
+                    />
+                </fieldset>
+              </div>
+              <div class="flex gap-2 justify-end">
+                <button commandfor="add-lineitem" command="close" type="button" class="btn">Cancel</button>
+                <button id="submitLineItem" type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </dialog>
 
           <div class="notes">
-            <div id="notes">
-              <h2>Notes</h2>
+            <div id="notes" class="px-4 py-4">
+              <h2 class="font-semibold">Notes</h2>
             </div>
-              <ul>
+              <ul class="px-4 py-3">
                 <% for (const note of selectedQuote.notes) { %>
                   <li><%= note.description %></li>
                 <% } %>
               </ul>
           </div>
 
-<button command="show-modal" commandfor="add-note" class="btn mb-4">Add Note</button>
-            <dialog id="add-note" class="inset-0 m-auto p-6 rounded-md min-w-md">
-              <h2 class="mb-4 font-bold text-lg">Add Note</h2>
-              <form action="/quotes/<%= selectedQuote.id %>/add-note" method="POST">
-                <div class="flex flex-col gap-4">
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  class="input"
-                  />
-                </div>
-                <button commandfor="add-note" command="close" type="button" class="btn">Close</button>
-                <button id="submitNote" type="submit" class="btn btn-primary">Submit</button>  
-              </form>
+          <button command="show-modal" commandfor="add-note" class="btn mb-4">Add Note</button>
+          <dialog id="add-note" class="inset-0 m-auto p-6 rounded-md min-w-md">
+            <h2 class="mb-4 font-bold text-lg">Add Note</h2>
+            <form action="/quotes/<%= selectedQuote.id %>/add-note" method="POST">
+              <div class="flex flex-col gap-2 mb-6">
+              <input
+                type="text"
+                id="description"
+                name="description"
+                class="input w-full"
+                />
+              </div>
+              <div class="flex gap-2 justify-end">
+                <button commandfor="add-note" command="close" type="button" class="btn">Cancel</button>
+                <button id="submitNote" type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </dialog>
 
-            </dialog>
           <div class="finalize">
             <form action="/quotes/<%= selectedQuote.id %>/finalize" method="POST">
               <button id="finalizeQuote" type="submit" class="btn">Finalize Quote</button>
@@ -227,9 +252,9 @@
           <div class="price">
             <div id="price">
               <h2>
-                <span>Total: </span>
+                <span class="font-semibold">Total: </span>
                 <span>
-                  <%= selectedQuote.lineitems.reduce((acc, item) => acc +
+                  $<%= selectedQuote.lineitems.reduce((acc, item) => acc +
                   item.price, 0) %>
                 </span>
               </h2>
