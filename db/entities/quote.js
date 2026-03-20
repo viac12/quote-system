@@ -19,9 +19,11 @@ module.exports = new EntitySchema({
     },
     discount_type: {
       type: String,
+      default: "flat",
     },
     discount_amount: {
       type: "double",
+      default: 0.0,
     },
     is_sanctioned: {
       type: Boolean,
