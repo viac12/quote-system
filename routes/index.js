@@ -66,4 +66,64 @@ router.post("/quotes/:id/finalize", async (req, res, next) => {
   res.redirect(url);
 });
 
+router.post("/quotes", async (req, res, next) => {
+  const quoteRepo = dataSource.getRepository(Quote);
+  const newQuote = await quoteRepo.save({
+    customer_id: req.body.customer,
+    description: req.body.description,
+  });
+
+  const url = new URL("http://localhost:3000/quotes");
+  url.searchParams.set("id", newQuote.id);
+  res.redirect(url);
+});
+
+router.post("/quotes/:id/add-note", async (req, res, next) => {
+  const quoteRepo = dataSource.getRepository(Quote);
+  const noteRepo = dataSource.getRepository(Note);
+  const quoteID = Number(req.params.id);
+  const quote = await quoteRepo.findOneBy({ id: quoteID });
+  const newNote = await noteRepo.save({
+    quote_id: quote.id,
+    description: req.body.description,
+  });
+
+  if (!quote) {
+    return res.status(404).send("Quote not found");
+  }
+
+  quote.notes = req.body.notes;
+
+  const url = new URL("http://localhost:3000/quotes");
+  url.searchParams.set("id", quote.id);
+  res.redirect(url);
+});
+
+router.post("/quotes/:id/add-lineitem", async (req, res, next) => {
+  const quoteRepo = dataSource.getRepository(Quote);
+  const lineItemRepo = dataSource.getRepository(LineItem);
+  const quoteID = Number(req.params.id);
+  const quote = await quoteRepo.findOneBy({ id: quoteID });
+  const newLineItem = await lineItemRepo.save({
+    quote_id: quote.id,
+    description: req.body.description,
+    price: req.body.price,
+  });
+
+  const url = new URL("http://localhost:3000/quotes");
+  url.searchParams.set("id", quote.id);
+  res.redirect(url);
+});
+
+router.post("/quotes/:id/remove-lineitem", async (req, res) => {
+  const lineItemRepo = dataSource.getRepository(LineItem);
+
+  const lineItemId = req.body.lineItemId;
+  const quoteId = req.body.quoteId;
+
+  await lineItemRepo.delete(lineItemId);
+
+  res.redirect("/quotes?id=" + quoteId);
+});
+
 module.exports = router;

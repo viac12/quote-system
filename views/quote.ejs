@@ -13,7 +13,7 @@
   </head>
   <body>
     <!--TOP BAR-->
-    <div class="top-bar p-4">
+    <div class="top-bar p-4 flex flex-row gap-5">
       <h1 class="font-bold">Quote System</h1>
     </div>
 
@@ -153,10 +153,41 @@
                 <td><%= lineitem.id%></td>
                 <td><%= lineitem.description %></td>
                 <td><%= lineitem.price %></td>
+                <td>
+                  <form action="/quotes/<%= selectedQuote.id %>/remove-lineitem" method="POST">
+                    <input type="hidden" name="lineItemId" value="<%= lineitem.id %>">
+                    <input type="hidden" name="quoteId" value="<%= selectedQuote.id %>">
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
               </tr>
               <% } %>
             </table>
           </div>
+
+          <button command="show-modal" commandfor="add-lineitem" class="btn mb-4">Add Line Item</button>
+            <dialog id="add-lineitem" class="inset-0 m-auto p-6 rounded-md min-w-md">
+              <h2 class="mb-4 font-bold text-lg">Add Line Item</h2>
+              <form action="/quotes/<%= selectedQuote.id %>/add-lineitem" method="POST">
+                <div class="flex flex-col gap-4">
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  class="input"
+                  />
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  class="input"
+                  />
+                </div>
+                <button commandfor="add-lineitem" command="close" type="button" class="btn">Close</button>
+                <button id="submitLineItem" type="submit" class="btn btn-primary">Submit</button>  
+              </form>
+
+            </dialog>
 
           <div class="notes">
             <div id="notes">
@@ -169,9 +200,26 @@
               </ul>
           </div>
 
+<button command="show-modal" commandfor="add-note" class="btn mb-4">Add Note</button>
+            <dialog id="add-note" class="inset-0 m-auto p-6 rounded-md min-w-md">
+              <h2 class="mb-4 font-bold text-lg">Add Note</h2>
+              <form action="/quotes/<%= selectedQuote.id %>/add-note" method="POST">
+                <div class="flex flex-col gap-4">
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  class="input"
+                  />
+                </div>
+                <button commandfor="add-note" command="close" type="button" class="btn">Close</button>
+                <button id="submitNote" type="submit" class="btn btn-primary">Submit</button>  
+              </form>
+
+            </dialog>
           <div class="finalize">
             <form action="/quotes/<%= selectedQuote.id %>/finalize" method="POST">
-              <button id="finalizeQuote" type="submit">Finalize Quote</button>
+              <button id="finalizeQuote" type="submit" class="btn">Finalize Quote</button>
             </form>
             <p>Finalized: <%= selectedQuote.is_finalized %></p>
           </div>
