@@ -6,16 +6,16 @@ const Note = require("../db/entities/note");
 const dataSource = require("../db");
 
 /* GET home page. */
-router.get("/", (req, res, next) => {
+router.get("/", (req, res, _next) => {
   res.render("index", { title: "Express" });
 });
 
 /* GET users listing. */
-router.get("/users", (req, res, next) => {
+router.get("/users", (req, res, _next) => {
   res.send("respond with a resource");
 });
 
-router.get("/quotes", async (req, res, next) => {
+router.get("/quotes", async (req, res, _next) => {
   const quoteRepo = dataSource.getRepository(Quote);
   const quoteID = req.query.id;
   const searchTerm = req.query.search;
@@ -50,7 +50,7 @@ router.get("/quotes", async (req, res, next) => {
   });
 });
 
-router.post("/quotes/:id/finalize", async (req, res, next) => {
+router.post("/quotes/:id/finalize", async (req, res, _next) => {
   const quoteRepo = dataSource.getRepository(Quote);
   const quoteID = Number(req.params.id);
   const updateResult = await quoteRepo.update(quoteID, {
@@ -66,7 +66,7 @@ router.post("/quotes/:id/finalize", async (req, res, next) => {
   res.redirect(url);
 });
 
-router.post("/quotes", async (req, res, next) => {
+router.post("/quotes", async (req, res, _next) => {
   const quoteRepo = dataSource.getRepository(Quote);
   const newQuote = await quoteRepo.save({
     customer_id: req.body.customer,
@@ -78,12 +78,12 @@ router.post("/quotes", async (req, res, next) => {
   res.redirect(url);
 });
 
-router.post("/quotes/:id/add-note", async (req, res, next) => {
+router.post("/quotes/:id/add-note", async (req, res, _next) => {
   const quoteRepo = dataSource.getRepository(Quote);
   const noteRepo = dataSource.getRepository(Note);
   const quoteID = Number(req.params.id);
   const quote = await quoteRepo.findOneBy({ id: quoteID });
-  const newNote = await noteRepo.save({
+  await noteRepo.save({
     quote_id: quote.id,
     description: req.body.description,
   });
@@ -99,12 +99,12 @@ router.post("/quotes/:id/add-note", async (req, res, next) => {
   res.redirect(url);
 });
 
-router.post("/quotes/:id/add-lineitem", async (req, res, next) => {
+router.post("/quotes/:id/add-lineitem", async (req, res, _next) => {
   const quoteRepo = dataSource.getRepository(Quote);
   const lineItemRepo = dataSource.getRepository(LineItem);
   const quoteID = Number(req.params.id);
   const quote = await quoteRepo.findOneBy({ id: quoteID });
-  const newLineItem = await lineItemRepo.save({
+  await lineItemRepo.save({
     quote_id: quote.id,
     description: req.body.description,
     price: req.body.price,
