@@ -1,3 +1,4 @@
+var { create } = require("express-handlebars");
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -14,7 +15,8 @@ var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 app.use(logger("dev"));
 app.use(express.json());
