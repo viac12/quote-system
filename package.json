@@ -8,7 +8,6 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-handlebars": "^9.0.1",
     "handlebars": "^4.7.9",
@@ -19,12 +18,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.14",
-    "prettier": "^3.8.1",
-    "prettier-plugin-ejs": "^1.0.3"
-  },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-ejs"
-    ]
+    "prettier": "^3.8.1"
   }
 }
