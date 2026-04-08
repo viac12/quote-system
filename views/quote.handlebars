@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="/styles/main-interface.css" />
   </head>
+
   <body>
     <!--TOP BAR-->
     <div class="top-bar px-8 py-4 flex flex-row gap-5">
@@ -26,12 +27,7 @@
             <div class="flex flex-col gap-2 mb-6">
               <fieldset class="fieldset">
                 <legend class="fieldset-legend">Description</legend>
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  class="input w-full"
-                  />
+                <input type="text" id="description" name="description" class="input w-full" />
               </fieldset>
 
               <fieldset class="fieldset">
@@ -43,25 +39,20 @@
             </div>
             <div class="flex gap-2 justify-end">
               <button commandfor="create-quote" command="close" type="button" class="btn">Cancel</button>
-              <button id="submitQuote" type="submit" class="btn btn-primary">Submit</button> 
-            </div> 
+              <button id="submitQuote" type="submit" class="btn btn-primary">Submit</button>
+            </div>
           </form>
 
         </dialog>
-        
-        <div class="flex justify-between">
-        <form action="/quotes" method="GET" class="flex gap-2 mb-2">
-          <input
-            type="text"
-            id="search"
-            name="search"
-            placeholder="Search Quotes"
-            class="input"
-          />
 
-          <button id="searchQuotes" type="submit" class="btn">Search</button>
-        </form>
-        <button command="show-modal" commandfor="create-quote" class="btn btn-soft btn-primary mb-4">Create Quote</button>
+        <div class="flex justify-between">
+          <form action="/quotes" method="GET" class="flex gap-2 mb-2">
+            <input type="text" id="search" name="search" placeholder="Search Quotes" class="input" />
+
+            <button id="searchQuotes" type="submit" class="btn">Search</button>
+          </form>
+          <button command="show-modal" commandfor="create-quote" class="btn btn-soft btn-primary mb-4">Create
+            Quote</button>
         </div>
         <div class="overflow-x-auto">
           <table class="table">
@@ -85,18 +76,15 @@
               </tr>
 
               {{#each quotes}}
-              <tr class="{{#ifEquals quote selectedQuote }}bg-base-200{{/ifEquals}}">
+              <tr class="{{#if (eq this.id ../selectedQuote.id) }}bg-base-200{{/if}}">
                 <td>{{this.id}}</td>
-                <td>{{ this.description }}</td>
-                <td>{{ this.customer.name }}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.customer.name}}</td>
                 <!-- <td>${{ quote.price }}</td> -->
                 <!-- <td>{{ quote.associate }}</td> -->
-                <td>{{ this.status }}</td>
+                <td>{{this.status}}</td>
                 <td class="text-center">
-                  <a
-                      class="btn btn-sm"
-                      href="?id={{this.id}}"
-                    >View</a>
+                  <a class="btn btn-sm" href="?id={{this.id}}">View</a>
                 </td>
               </tr>
               {{/each}}
@@ -105,17 +93,16 @@
         </div>
       </div>
 
-
       {{#if selectedQuote}}
       <!--DIVIDER-->
       <div class="vl"></div>
-      
+
       <!--QUOTE VIEW-->
       <div class="p-8 flex flex-col flex-grow">
         <div class="mb-4">
           <h2 class="font-bold text-lg">
             Quote #
-            {{ selectedQuote.id }}
+            {{selectedQuote.id}}
           </h2>
           <div class="divider"></div>
         </div>
@@ -123,10 +110,10 @@
         <div class="quote-details mb-20">
           <div class="customer-details">
             <ul>
-              <li>{{ selectedQuote.customer.name }}</li>
+              <li>{{selectedQuote.customer.name}}</li>
               <li>Customer Phone #</li>
-              <li>{{ selectedQuote.customer.email }}</li>
-              <li>{{ selectedQuote.customer.address }}</li>
+              <li>{{selectedQuote.customer.email}}</li>
+              <li>{{selectedQuote.customer.address}}</li>
             </ul>
           </div>
 
@@ -147,13 +134,13 @@
 
               {{#each selectedQuote.lineitems}}
               <tr>
-                <td>{{ this.id }}</td>
-                <td>{{ this.description  }}</td>
-                <td>{{ this.price  }}</td>
+                <td>{{this.id}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.price}}</td>
                 <td>
-                  <form action="/quotes/{{ selectedQuote.id  }}/remove-lineitem" method="POST">
-                    <input type="hidden" name="lineItemId" value="{{ this.id  }}">
-                    <input type="hidden" name="quoteId" value="{{ selectedQuote.id  }}">
+                  <form action="/quotes/{{selectedQuote.id}}/remove-lineitem" method="POST">
+                    <input type="hidden" name="lineItemId" value="{{this.id}}" />
+                    <input type="hidden" name="quoteId" value="{{selectedQuote.id}}" />
                     <button type="submit">Delete</button>
                   </form>
                 </td>
@@ -166,28 +153,16 @@
 
           <dialog id="add-lineitem" class="inset-0 m-auto p-6 rounded-md min-w-md">
             <h2 class="mb-4 font-bold text-lg">Add Line Item</h2>
-            <form action="/quotes/{{ selectedQuote.id  }}/add-lineitem" method="POST">
+            <form action="/quotes/{{selectedQuote.id}}/add-lineitem" method="POST">
               <div class="flex flex-col gap-2 mb-6">
                 <fieldset class="fieldset">
                   <legend class="fieldset-legend">Description</legend>
-                  <input
-                    type="text"
-                    id="description"
-                    name="description"
-                    class="input w-full"
-                    required
-                    />
-                 </fieldset>
+                  <input type="text" id="description" name="description" class="input w-full" required />
+                </fieldset>
 
                 <fieldset class="fieldset">
                   <legend class="fieldset-legend">Price</legend>
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    class="input validator w-full"
-                    required
-                    />
+                  <input type="number" id="price" name="price" class="input validator w-full" required />
                 </fieldset>
               </div>
               <div class="flex gap-2 justify-end">
@@ -201,26 +176,21 @@
             <div id="notes" class="px-4 py-4">
               <h2 class="font-semibold">Notes</h2>
             </div>
-              <ul class="px-4 py-3">
+            <ul class="px-4 py-3">
 
-                {{#each selectedQuote.notes}}
-                  <li>{{this.description}}</li>
-                {{/each}}
+              {{#each selectedQuote.notes}}
+              <li>{{this.description}}</li>
+              {{/each}}
 
-              </ul>
+            </ul>
           </div>
 
           <button command="show-modal" commandfor="add-note" class="btn mb-4">Add Note</button>
           <dialog id="add-note" class="inset-0 m-auto p-6 rounded-md min-w-md">
             <h2 class="mb-4 font-bold text-lg">Add Note</h2>
-            <form action="/quotes/{{ selectedQuote.id  }}/add-note" method="POST">
+            <form action="/quotes/{{selectedQuote.id}}/add-note" method="POST">
               <div class="flex flex-col gap-2 mb-6">
-              <input
-                type="text"
-                id="description"
-                name="description"
-                class="input w-full"
-                />
+                <input type="text" id="description" name="description" class="input w-full" />
               </div>
               <div class="flex gap-2 justify-end">
                 <button commandfor="add-note" command="close" type="button" class="btn">Cancel</button>
@@ -230,10 +200,11 @@
           </dialog>
 
           <div class="finalize">
-            <form action="/quotes/{{ selectedQuote.id  }}/finalize" method="POST">
-              <button id="finalizeQuote" type="submit" class="btn">Finalize Quote</button>
+            <form action="/quotes/{{selectedQuote.id}}/finalize" method="POST">
+              <button id="finalizeQuote" type="submit" class="btn">Finalize
+                Quote</button>
             </form>
-            <p>Finalized: {{ selectedQuote.is_finalized  }}</p>
+            <p>Finalized: {{selectedQuote.is_finalized}}</p>
           </div>
 
           <div class="price">
@@ -252,4 +223,5 @@
       {{/if}}
     </div>
   </body>
+
 </html>
