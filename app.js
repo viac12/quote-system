@@ -14,6 +14,26 @@ var indexRouter = require("./routes/index");
 var app = express();
 
 // view engine setup
+const hbs = create({
+  helpers: {
+    ifEquals(a, b, options) {
+      if (a == b) {
+        options.fn(this);
+      } else {
+        options.inverse(this);
+      }
+    },
+    sums(list, property = null) {
+      return list.reduce((acc, item) => {
+        if (property) {
+          return acc + item[property];
+        } else {
+          return acc + item;
+        }
+      }, 0);
+    },
+  },
+});
 app.set("views", path.join(__dirname, "views"));
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");

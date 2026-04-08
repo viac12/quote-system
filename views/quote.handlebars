@@ -84,44 +84,29 @@
                 <th>View</th>
               </tr>
 
-              <% quotes.forEach(function(quote){ %>
-              <tr class="<%= quote == selectedQuote ? "bg-base-200" : "" %>">
-                <td><%= quote.id %></td>
-                <td><%= quote.description %></td>
-                <td><%= quote.customer.name %></td>
-                <!-- <td>$<%= quote.price %></td> -->
-                <!-- <td><%= quote.associate %></td> -->
-                <td><%= quote.status %></td>
+              {{#each quotes}}
+              <tr class="{{#ifEquals quote selectedQuote }}bg-base-200{{/ifEquals}}">
+                <td>{{this.id}}</td>
+                <td>{{ this.description }}</td>
+                <td>{{ this.customer.name }}</td>
+                <!-- <td>${{ quote.price }}</td> -->
+                <!-- <td>{{ quote.associate }}</td> -->
+                <td>{{ this.status }}</td>
                 <td class="text-center">
                   <a
                       class="btn btn-sm"
-                      href="<%= (() => {
-                        const params = new URLSearchParams();
-                        for (const [name, value] of Object.entries(req.query)) {
-                          params.set(name, value);
-                        }
-                        params.set("id", quote.id);
-                        return "?" + params.toString();
-                      })() %>"
-                      <% if (selectedQuote) { %>
-                      onclick="
-                        event.preventDefault();
-                        const params = new URLSearchParams(window.location.search);
-                        params.set('id', '<%= quote.id %>')
-                        window.location.replace('?' + params.toString());
-                      "
-                      <% } %>
+                      href="?id={{this.id}}"
                     >View</a>
                 </td>
               </tr>
-              <% }); %>
+              {{/each}}
             </thead>
           </table>
         </div>
       </div>
 
 
-      <% if (selectedQuote) { %>
+      {{#if selectedQuote}}
       <!--DIVIDER-->
       <div class="vl"></div>
       
@@ -130,7 +115,7 @@
         <div class="mb-4">
           <h2 class="font-bold text-lg">
             Quote #
-            <%= selectedQuote.id %>
+            {{ selectedQuote.id }}
           </h2>
           <div class="divider"></div>
         </div>
@@ -138,10 +123,10 @@
         <div class="quote-details mb-20">
           <div class="customer-details">
             <ul>
-              <li><%= selectedQuote.customer.name %></li>
+              <li>{{ selectedQuote.customer.name }}</li>
               <li>Customer Phone #</li>
-              <li><%= selectedQuote.customer.email %></li>
-              <li><%= selectedQuote.customer.address %></li>
+              <li>{{ selectedQuote.customer.email }}</li>
+              <li>{{ selectedQuote.customer.address }}</li>
             </ul>
           </div>
 
@@ -160,20 +145,20 @@
                 </tr>
               </thead>
 
-              <% for (const lineitem of selectedQuote.lineitems) { %>
+              {{#each selectedQuote.lineitems}}
               <tr>
-                <td><%= lineitem.id%></td>
-                <td><%= lineitem.description %></td>
-                <td><%= lineitem.price %></td>
+                <td>{{ this.id }}</td>
+                <td>{{ this.description  }}</td>
+                <td>{{ this.price  }}</td>
                 <td>
-                  <form action="/quotes/<%= selectedQuote.id %>/remove-lineitem" method="POST">
-                    <input type="hidden" name="lineItemId" value="<%= lineitem.id %>">
-                    <input type="hidden" name="quoteId" value="<%= selectedQuote.id %>">
+                  <form action="/quotes/{{ selectedQuote.id  }}/remove-lineitem" method="POST">
+                    <input type="hidden" name="lineItemId" value="{{ this.id  }}">
+                    <input type="hidden" name="quoteId" value="{{ selectedQuote.id  }}">
                     <button type="submit">Delete</button>
                   </form>
                 </td>
               </tr>
-              <% } %>
+              {{/each}}
             </table>
           </div>
 
@@ -181,7 +166,7 @@
 
           <dialog id="add-lineitem" class="inset-0 m-auto p-6 rounded-md min-w-md">
             <h2 class="mb-4 font-bold text-lg">Add Line Item</h2>
-            <form action="/quotes/<%= selectedQuote.id %>/add-lineitem" method="POST">
+            <form action="/quotes/{{ selectedQuote.id  }}/add-lineitem" method="POST">
               <div class="flex flex-col gap-2 mb-6">
                 <fieldset class="fieldset">
                   <legend class="fieldset-legend">Description</legend>
@@ -217,16 +202,18 @@
               <h2 class="font-semibold">Notes</h2>
             </div>
               <ul class="px-4 py-3">
-                <% for (const note of selectedQuote.notes) { %>
-                  <li><%= note.description %></li>
-                <% } %>
+
+                {{#each selectedQuote.notes}}
+                  <li>{{this.description}}</li>
+                {{/each}}
+
               </ul>
           </div>
 
           <button command="show-modal" commandfor="add-note" class="btn mb-4">Add Note</button>
           <dialog id="add-note" class="inset-0 m-auto p-6 rounded-md min-w-md">
             <h2 class="mb-4 font-bold text-lg">Add Note</h2>
-            <form action="/quotes/<%= selectedQuote.id %>/add-note" method="POST">
+            <form action="/quotes/{{ selectedQuote.id  }}/add-note" method="POST">
               <div class="flex flex-col gap-2 mb-6">
               <input
                 type="text"
@@ -243,10 +230,10 @@
           </dialog>
 
           <div class="finalize">
-            <form action="/quotes/<%= selectedQuote.id %>/finalize" method="POST">
+            <form action="/quotes/{{ selectedQuote.id  }}/finalize" method="POST">
               <button id="finalizeQuote" type="submit" class="btn">Finalize Quote</button>
             </form>
-            <p>Finalized: <%= selectedQuote.is_finalized %></p>
+            <p>Finalized: {{ selectedQuote.is_finalized  }}</p>
           </div>
 
           <div class="price">
@@ -254,8 +241,7 @@
               <h2>
                 <span class="font-semibold">Total: </span>
                 <span>
-                  $<%= selectedQuote.lineitems.reduce((acc, item) => acc +
-                  item.price, 0) %>
+                  ${{sums selectedQuote.lineitems "price"}}
                 </span>
               </h2>
               <hr />
@@ -263,7 +249,7 @@
           </div>
         </div>
       </div>
-      <% } %>
+      {{/if}}
     </div>
   </body>
 </html>
